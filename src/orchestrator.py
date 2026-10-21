@@ -1021,7 +1021,11 @@ class HorizonOrchestrator:
             f"   Re-analyzing {len(expanded)} Twitter items with reply context...\n"
         )
         ai_client = create_ai_client(self.config.ai)
-        analyzer = ContentAnalyzer(ai_client, self.profiles, console=self.console)
+        analyzer = ContentAnalyzer(
+            ai_client, self.profiles, console=self.console,
+            concurrency=self.config.ai.analysis_concurrency,
+            throttle_sec=self.config.ai.throttle_sec,
+        )
         await analyzer.analyze_batch(expanded)
 
     async def enrich_items(self, items: List[ContentItem]) -> EnrichmentBatchResult:
@@ -1046,6 +1050,7 @@ class HorizonOrchestrator:
             self.config.ai.languages,
             console=self.console,
             tools=ToolRegistry(self.storage.summaries_dir),
+            concurrency=self.config.ai.enrichment_concurrency,
         )
         result = await enricher.enrich_batch(items)
         self.console.print(
@@ -1071,7 +1076,11 @@ class HorizonOrchestrator:
         self.console.print(f"{self.icons['ai']} Analyzing content with AI...")
 
         ai_client = create_ai_client(self.config.ai)
-        analyzer = ContentAnalyzer(ai_client, self.profiles, console=self.console)
+        analyzer = ContentAnalyzer(
+            ai_client, self.profiles, console=self.console,
+            concurrency=self.config.ai.analysis_concurrency,
+            throttle_sec=self.config.ai.throttle_sec,
+        )
 
         return await analyzer.analyze_batch(items)
 
