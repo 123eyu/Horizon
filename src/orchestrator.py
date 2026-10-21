@@ -1093,30 +1093,3 @@ class HorizonOrchestrator:
         )
 
         return await analyzer.analyze_batch(items)
-
-    async def _generate_summary(
-        self,
-        items: List[ContentItem],
-        date: str,
-        total_fetched: int,
-        language: str = "en",
-    ) -> str:
-        """Generate daily summary.
-
-        Args:
-            items: Important items to include (already enriched with background/related)
-            date: Date string
-            total_fetched: Total items fetched
-            language: Output language ("en" or "zh")
-
-        Returns:
-            str: Markdown summary
-        """
-        self.console.print(f"{self.icons['summary']} Generating daily summary...")
-
-        summarizer = DailySummarizer(
-            profile_names=self.profiles.names,
-            profile_order=self.config.digest.profile_order,
-        )
-
-        return await summarizer.generate_summary(items, date, total_fetched, language=language)
