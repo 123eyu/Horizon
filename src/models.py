@@ -364,7 +364,7 @@ class OpenBBConfig(BaseModel):
 
     Uses the installed `openbb` SDK to fetch news and filings for a set of
     tickers. The SDK is an optional dependency; if it is not installed the
-    scraper will no-op with a console warning rather than crash the run.
+    scraper reports a source failure while other sources can still run.
 
     Provider credentials (FMP, Benzinga, Polygon, Intrinio, Tiingo, etc.)
     are resolved by openbb from environment variables / its own user
