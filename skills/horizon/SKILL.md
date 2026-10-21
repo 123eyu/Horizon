@@ -49,9 +49,9 @@ installation.
    helper with `run_pipeline --describe` and an explicit `--horizon-path` as shown
    below. These checks need no model credentials and do not fetch or generate news.
 5. For setup requests, continue with **Onboard and customize**: use the example
-   config as a reference, preserve existing settings, and resolve the user's model
-   and source credentials before a live run. Horizon uses its own configuration;
-   do not assume it inherits the host assistant's model credentials.
+   config as a reference, preserve existing settings, and prefer reusing available
+   model access before asking for new credentials. Resolve model and source
+   credentials before a live run.
 
 Report the checkout path, how to invoke its environment, which checks passed,
 and any remaining configuration needs. Distinguish a working installation from
@@ -80,6 +80,32 @@ a server, Docker, macOS, Linux, or Windows.
 Start with the user's reading goal and existing configuration. Resolve model and
 credential availability before a live AI run. Follow the repository's installation
 instructions and use its example config as a schema reference.
+
+### Reuse model configuration
+
+1. Preserve existing Horizon model settings unless the user requests a change.
+   For a new setup, prefer provider API keys already available in the execution
+   environment, including those supplied by the host assistant. Check relevant
+   variable names for presence without printing their values. If the host keeps
+   the key privately, use its documented export or environment-injection mechanism
+   where available; installation by an agent does not itself share credentials.
+2. Match `ai.provider` to a supported API protocol and configure `ai.model`,
+   `ai.base_url`, and `ai.api_key_env` together. The last field names the supplied
+   environment variable, not the key value; existing custom variable names can be
+   reused. A key alone does not identify the model or endpoint. Ask only for
+   missing settings or a choice between multiple available services.
+3. An agent's OAuth or subscription login is not a drop-in provider API key. If
+   no usable provider configuration is available, ask the user to supply the
+   missing credentials through the environment or `.env`.
+4. For new or changed model settings, run `validate_config` in the intended runtime
+   and inspect `missing_env`. Then make one minimal completion through
+   `create_ai_client` in `src/ai/client.py`, loading the active configuration and
+   environment with the checkout's existing loaders. Request a small JSON object
+   and verify that the response parses. A successful call already made with the
+   same settings can serve as this check. Report configuration validation and
+   actual model connectivity separately; keep secret values out of the output.
+
+### Sources and Profiles
 
 For source recommendations, reuse `load_presets()` and `match_sources()` in
 `src/setup/presets.py`: the catalog supports a local fallback and
