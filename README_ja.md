@@ -111,6 +111,18 @@
 
 CLIから全体を実行するほか、[MCP](src/mcp/README.md)を通じてAIアシスタントから収集・分析・生成などの各段階を呼び出せます。
 
+## Agent Skill
+
+AIアシスタントに情報源の設定、プロファイルのカスタマイズ、日報の生成を任せられます。
+
+```bash
+npx skills add Thysrael/Horizon --skill horizon -g
+```
+
+[インストールと使い方](docs/agent-skill.md) · [Skill ZIPをダウンロード](https://thysrael.github.io/Horizon/downloads/horizon-skill.zip)
+
+インストールコマンドにはNode.js 22.20+が必要です。Skillを追加したら、AIアシスタントにHorizonのインストールと設定を依頼するか、以下の手順で手動インストールできます。
+
 ## クイックスタート
 
 ### 1. インストール

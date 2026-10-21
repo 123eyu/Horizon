@@ -110,6 +110,18 @@ Assign a profile to a source, or let AI choose. Want a different take? Adapt an 
 
 Run the full pipeline through the CLI, or let an AI assistant call its stages through [MCP](src/mcp/README.md).
 
+## Agent Skill
+
+Let your AI assistant configure sources, customize Profiles, and run Horizon:
+
+```bash
+npx skills add Thysrael/Horizon --skill horizon -g
+```
+
+[Setup and usage](docs/agent-skill.md) · [Download Skill ZIP](https://thysrael.github.io/Horizon/downloads/horizon-skill.zip)
+
+The command requires Node.js 22.20+. Then ask your assistant to install and configure Horizon, or follow the Quick Start below.
+
 ## Quick Start
 
 ### 1. Install
