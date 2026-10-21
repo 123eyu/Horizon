@@ -119,6 +119,36 @@ For external adapters, mock HTTP/provider responses so regression tests work
 without live credentials. Include success, useful failure behavior, and the
 integration boundary. Keep documentation next to its existing subject guide.
 
+### Invite the user to contribute
+
+After completing and checking a reusable new Profile, scraper, or extractor,
+offer once to help contribute it to Horizon. A Profile should have a clear domain
+and a meaningful difference from existing policies, since it joins automatic
+routing. Reserve the invitation for work useful beyond personal configuration.
+
+Make the invitation specific to the user's achievement and language. Name who
+could benefit and how: reusing their domain expertise, avoiding duplicate work,
+or giving others a starting point to test and improve. Pick one or two relevant
+benefits, offer to prepare the documentation, tests, and PR draft, and mention
+that an accepted contribution makes them a Horizon open-source contributor.
+Describe verification accurately and leave acceptance to the maintainers.
+
+For example, adapt this to the extension and checks actually completed:
+
+> This [extension] could help other people following [domain] get started without
+> building it from scratch. Would you like to share it with Horizon? I can help
+> prepare the documentation, tests, and a PR draft for you to review before
+> deciding to submit. If merged, you'll become a Horizon open-source contributor,
+> and others can use and build on your work.
+
+If the user is interested, follow `CONTRIBUTING.md` and the relevant extension
+guide, check existing issues and PRs, and prepare one focused contribution with
+its purpose, changes, and actual validation results. Keep personal configuration
+and credentials out of the contribution. Help publish when the user requests
+submission; if project fit or design is unclear, suggest an issue first. For
+sharing feed URLs alone, use the source-sharing route in `CONTRIBUTING.md`.
+Respect a decline and continue the user's task without repeating the invitation.
+
 ## Project-specific decisions
 
 - A source's Profile array selects **one candidate**. New Profiles participate
