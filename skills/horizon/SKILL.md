@@ -1,8 +1,8 @@
 ---
 name: horizon
-description: Configure, run, customize, schedule, and extend Horizon, the profile-driven news radar. Use for Horizon source selection and onboarding, generating or reading daily digests, tuning processing profiles and digest limits, setting up delivery and scheduled runs, diagnosing pipeline results, or contributing scrapers, extractors, profiles, and pipeline changes to this repository. Also use when a user wants to turn reading interests into a personal news radar using Horizon.
+description: Install, configure, run, customize, schedule, and extend Horizon, the profile-driven news radar. Use for first-time Horizon installation, source selection and onboarding, generating or reading daily digests, tuning processing profiles and digest limits, setting up delivery and scheduled runs, diagnosing pipeline results, or contributing scrapers, extractors, profiles, and pipeline changes to this repository. Also use when a user wants to turn reading interests into a personal news radar using Horizon.
 license: MIT
-compatibility: Requires a Horizon checkout, Python 3.11+ with its dependencies, and a shell for execution. Fetching and AI processing use Horizon's configured services. Horizon MCP is optional.
+compatibility: Requires shell access. Execution needs a Horizon checkout and Python 3.11+ with its dependencies; the agent can set these up when installation is requested and network access is available. Fetching and AI processing use Horizon's configured services. Horizon MCP is optional.
 ---
 
 # Horizon
@@ -14,16 +14,48 @@ results, and responds in the user's language.
 
 ## Establish context
 
-1. Locate the Horizon checkout from the user's path, `HORIZON_PATH`, or the
-   current workspace. It contains `pyproject.toml` and `src/mcp/service.py`.
-2. Locate this skill from its loaded path. `scripts/` and `references/` are
+1. Locate this skill from its loaded path. `scripts/` and `references/` are
    relative to **the skill**; `docs/`, `src/`, `profiles/`, and `data/` below are
    relative to **the checkout**. An installed skill may live elsewhere.
+2. Locate the Horizon checkout from the user's path, `HORIZON_PATH`, or the
+   current workspace. It contains `pyproject.toml` and `src/mcp/service.py`.
+   For installation or onboarding requests, follow **First-time installation**
+   below if the checkout or its runtime is missing.
 3. Inspect the active config and repository instructions. For edits, inspect
    `git status --short` and preserve unrelated work and existing `${VAR}` values.
 4. Reuse choices already provided. Ask only for missing decisions that change
    the result: interests, model, languages, reading budget, host, timezone, or
    delivery destination. Keep API keys in the user's environment or `.env`.
+
+## First-time installation
+
+When the user asks to install Horizon or build a news radar, prepare the missing
+runtime before invoking the helper. Loading the skill alone does not request an
+installation.
+
+1. Reuse an existing checkout and working environment. Otherwise, use the user's
+   chosen destination or a new `Horizon` directory in their working area; ask
+   where to install if no destination is clear. Keep it separate from the installed
+   skill directory and preserve any existing files at the destination.
+2. Check for Git and either uv or Python 3.11+ with pip. Set up missing prerequisites
+   using their official platform-specific instructions where the environment
+   permits it. If network or shell access is unavailable, report that concrete
+   blocker and the next step the user needs to take.
+3. Clone `https://github.com/Thysrael/Horizon.git` into the chosen directory when
+   needed. Read its repository instructions and README Quick Start, then follow
+   those installation steps in a project-local environment. Use the checked-out
+   documentation as the source of truth for dependencies and optional extras.
+4. Verify `horizon --help` through that environment and run the installed skill's
+   helper with `run_pipeline --describe` and an explicit `--horizon-path` as shown
+   below. These checks need no model credentials and do not fetch or generate news.
+5. For setup requests, continue with **Onboard and customize**: use the example
+   config as a reference, preserve existing settings, and resolve the user's model
+   and source credentials before a live run. Horizon uses its own configuration;
+   do not assume it inherits the host assistant's model credentials.
+
+Report the checkout path, how to invoke its environment, which checks passed,
+and any remaining configuration needs. Distinguish a working installation from
+a configured and successfully executed news pipeline.
 
 ## Read the task's source of truth
 
