@@ -12,6 +12,7 @@ from ..models import FirecrawlExtractorConfig
 logger = logging.getLogger(__name__)
 
 FIRECRAWL_SCRAPE_URL = "https://api.firecrawl.dev/v2/scrape"
+_SCRAPE_TIMEOUT_MS = 60_000
 
 
 class FirecrawlExtractor(BaseExtractor):
@@ -37,7 +38,10 @@ class FirecrawlExtractor(BaseExtractor):
                     "formats": ["markdown"],
                     "onlyMainContent": self._config.only_main_content,
                     "integration": "_horizon",
+                    "timeout": _SCRAPE_TIMEOUT_MS,
                 },
+                # Allow the server's scrape budget plus time for the response.
+                timeout=_SCRAPE_TIMEOUT_MS / 1000 + 5,
             )
             response.raise_for_status()
         except httpx.HTTPError as e:
@@ -45,7 +49,12 @@ class FirecrawlExtractor(BaseExtractor):
             return None
 
         try:
-            return response.json()["data"]["markdown"] or None
+            payload = response.json()
+            if not isinstance(payload, dict) or payload.get("success") is not True:
+                logger.warning("Firecrawl scrape did not report success for %s", url)
+                return None
+            markdown = payload["data"]["markdown"]
+            return markdown if isinstance(markdown, str) and markdown.strip() else None
         except (ValueError, KeyError, TypeError) as e:
             logger.warning("Unexpected Firecrawl response for %s: %s", url, e)
             return None
