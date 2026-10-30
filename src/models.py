@@ -136,7 +136,7 @@ class AIProvider(str, Enum):
 # Provider-specific defaults used by setup and provider-chain expansion.
 AI_PROVIDER_DEFAULTS = {
     AIProvider.ANTHROPIC: {
-        "model": "claude-3-5-sonnet-20241022",
+        "model": "claude-sonnet-5-5",
         "api_key_env": "ANTHROPIC_API_KEY",
         "base_url": None,
     },
