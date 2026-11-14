@@ -378,3 +378,38 @@ def test_check_subscriptions_matches_decoded_subject(
         operation.assert_called_once_with("user@example.com")
     else:
         operation.assert_not_called()
+
+
+def test_check_subscriptions_logs_out_when_search_fails(monkeypatch):
+    class FailingSearchIMAP:
+        instances = []
+
+        def __init__(self, server, port):
+            self.closed = False
+            self.logged_out = False
+            self.__class__.instances.append(self)
+
+        def login(self, username, password):
+            pass
+
+        def select(self, mailbox):
+            return "OK", [b"1"]
+
+        def search(self, charset, criteria):
+            raise RuntimeError("search failed")
+
+        def close(self):
+            self.closed = True
+
+        def logout(self):
+            self.logged_out = True
+
+    monkeypatch.setattr("src.services.email.imaplib.IMAP4_SSL", FailingSearchIMAP)
+    monkeypatch.setenv("EMAIL_PASSWORD", "secret")
+
+    manager = EmailManager(_email_config(imap_enabled=True))
+    manager.check_subscriptions(storage_manager=object())
+
+    # The search exception must not leave the authenticated connection open.
+    assert FailingSearchIMAP.instances[0].closed is True
+    assert FailingSearchIMAP.instances[0].logged_out is True
