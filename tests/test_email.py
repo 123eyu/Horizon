@@ -310,6 +310,7 @@ def test_check_subscriptions_handles_unsubscribe_before_fetch_marks_seen(
         return "OK", [(message_id, message)]
 
     mail = Mock(spec=imaplib.IMAP4_SSL)
+    mail.select.return_value = ("OK", [b"1"])
     mail.search.side_effect = search
     mail.fetch.side_effect = fetch
     monkeypatch.setattr("src.services.email.imaplib.IMAP4_SSL", Mock(return_value=mail))
@@ -356,6 +357,7 @@ def test_check_subscriptions_matches_decoded_subject(
     )
     raw_message = f"From: user@example.com\r\nSubject: {subject}\r\n\r\n".encode()
     mail = Mock(spec=imaplib.IMAP4_SSL)
+    mail.select.return_value = ("OK", [b"1"])
     mail.search.side_effect = [
         ("OK", [b"1" if keyword == "SUBSCRIBE" else b""]),
         ("OK", [b"1" if keyword == "UNSUBSCRIBE" else b""]),
